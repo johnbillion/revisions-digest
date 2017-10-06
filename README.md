@@ -1,6 +1,6 @@
-# Revisions Feed
+# Revisions Digest
 
-A WordPress plugin which generates RSS feeds, REST API endpoints, and admin dashboard features to display recent changes to content via their stored revisions.
+A WordPress plugin which generates digests and feeds of changes to content via their stored revisions. Digests can be consumed via email, RSS feeds, REST API endpoints, and admin dashboard features.
 
 This allows users to keep track of changes to content which they may be interested in - for example changes to pages on a documentation website.
 
