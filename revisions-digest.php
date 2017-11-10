@@ -67,10 +67,36 @@ function widget( $no_idea, array $meta_box ) {
 
 	foreach ( $changes as $change ) {
 		echo '<div class="activity-block">';
-		echo '<h3>' . get_the_title( $change['post_id'] ) . '</h3>';
+
+		printf(
+			'<h3><a href="%1$s">%2$s</a></h3>',
+			get_permalink( $change['post_id'] ),
+			get_the_title( $change['post_id'] )
+		);
+
+		$authors = array_filter( array_map( function( int $user_id ) {
+			$user = get_userdata( $user_id );
+			if ( ! $user ) {
+				return false;
+			}
+
+			return $user->display_name;
+		}, $change['authors'] ) );
+
+		/* translators: %l: comma-separated list of author names */
+		$changes_by = wp_sprintf(
+			__( 'Changed by %l', 'query-monitor' ),
+			$authors
+		);
+		printf(
+			'<p>%1$s</p>',
+			esc_html( $changes_by )
+		);
+
 		echo '<table class="diff">';
 		echo $change['rendered']; // WPCS: XSS ok.
 		echo '</table>';
+
 		echo '</div>';
 	}
 }
