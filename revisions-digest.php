@@ -70,7 +70,7 @@ function widget( $no_idea, array $meta_box ) {
 
 		printf(
 			'<h3><a href="%1$s">%2$s</a></h3>',
-			get_permalink( $change['post_id'] ),
+			esc_url( get_permalink( $change['post_id'] ) ),
 			get_the_title( $change['post_id'] )
 		);
 
