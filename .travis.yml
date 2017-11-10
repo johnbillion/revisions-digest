@@ -1,0 +1,48 @@
+# run on container environment
+sudo: false
+
+language: php
+
+cache:
+  apt: true
+  directories:
+    - node_modules
+    - vendor
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
+
+php:
+  - 7.2
+  - 7.0
+
+env:
+  - WP_VERSION=latest
+  - WP_VERSION=nightly
+
+matrix:
+  fast_finish: true
+
+before_install:
+  - |
+    if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
+      phpenv config-rm xdebug.ini
+    fi
+
+install:
+  - composer install --no-interaction
+
+before_script:
+  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+
+script:
+  - |
+    export WP_MULTISITE=0
+    ./vendor/bin/phpunit -v --exclude-group=ms-required
+  - |
+    export WP_MULTISITE=1
+    ./vendor/bin/phpunit -v --exclude-group=ms-excluded
+  - |
+    ./vendor/bin/phpcs -n -p -s --colors .

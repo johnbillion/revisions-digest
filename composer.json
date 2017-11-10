@@ -1,0 +1,28 @@
+{
+	"name"       : "johnbillion/revisions-digest",
+	"description": "Digests of revisions.",
+	"homepage"   : "https://github.com/johnbillion/revisions-digest",
+	"type"       : "wordpress-plugin",
+	"license"    : "GPL-2.0+",
+	"authors"    : [
+		{
+			"name"    : "John Blackbourn",
+			"homepage": "https://johnblackbourn.com/"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/johnbillion/revisions-digest/issues",
+		"forum": "https://wordpress.org/support/plugin/revisions-digest",
+		"source": "https://github.com/johnbillion/revisions-digest"
+	},
+	"require": {
+		"composer/installers": "^1"
+	},
+	"require-dev" : {
+		"johnbillion/php-docs-standards": "^1",
+		"phpunit/phpunit": "^6",
+		"slevomat/coding-standard": "^4",
+		"wimg/php-compatibility": "^8",
+		"wp-coding-standards/wpcs": "^0.13"
+    }
+}
