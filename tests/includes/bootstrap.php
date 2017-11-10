@@ -16,8 +16,8 @@ if ( ! file_exists( $_tests_funcs ) ) {
 require_once $_tests_funcs;
 
 tests_add_filter( 'muplugins_loaded', function() {
-	require_once dirname( __DIR__ ) . '/revisions-digest.php';
+	require_once dirname( dirname( __DIR__ ) ) . '/revisions-digest.php';
 } );
 
 require_once $_tests_dir . '/includes/bootstrap.php';
-require_once dirname( __FILE__ ) . '/includes/testcase.php';
+require_once dirname( __FILE__ ) . '/testcase.php';
