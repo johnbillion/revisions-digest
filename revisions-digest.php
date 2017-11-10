@@ -85,7 +85,7 @@ function widget( $no_idea, array $meta_box ) {
 
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
-			__( 'Changed by %l', 'query-monitor' ),
+			__( 'Changed by %l', 'revisions-digest' ),
 			$authors
 		);
 		printf(
