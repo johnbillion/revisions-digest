@@ -141,8 +141,8 @@ function get_digest_changes() : array {
 
 		$renderer = new WP_Text_Diff_Renderer_Table( [
 			'show_split_view'        => false,
-			'leading_context_lines'  => 3,
-			'trailing_context_lines' => 3,
+			'leading_context_lines'  => 1,
+			'trailing_context_lines' => 1,
 		] );
 		$rendered = render_diff( $diff, $renderer );
 
