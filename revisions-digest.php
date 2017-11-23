@@ -85,7 +85,8 @@ function widget( $no_idea, array $meta_box ) {
 
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
-			__( 'Changed by %l', 'revisions-digest' ),
+			__( 'Changed on %s by %l', 'revisions-digest' ),
+			date( 'l F jS Y \a\t h:i:s A \U\T\C', strtotime( $change['latest']->post_date_gmt . ' +0000'  ) ),
 			$authors
 		);
 		printf(
