@@ -83,10 +83,12 @@ function widget( $no_idea, array $meta_box ) {
 			return $user->display_name;
 		}, $change['authors'] ) );
 
+		$modified = strtotime( $change['latest']->post_modified );
+
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
 			__( 'Changed on %s by %l', 'revisions-digest' ),
-			date( 'l F jS Y \a\t h:i:s A \U\T\C', strtotime( $change['latest']->post_date_gmt . ' +0000'  ) ),
+			date_i18n( __( 'M j, Y @ H:i' , $modified  ) ),
 			$authors
 		);
 		printf(
