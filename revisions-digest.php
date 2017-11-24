@@ -83,13 +83,13 @@ function widget( $no_idea, array $meta_box ) {
 			return $user->display_name;
 		}, $change['authors'] ) );
 
-		$modified = strtotime( $change['latest']->post_modified );
+		$modified_gmt = strtotime( $change['latest']->post_modified_gmt . ' +0000' );
 
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
-			__( 'Changed on %s by %l', 'revisions-digest' ),
-			date_i18n( __( 'M j, Y @ H:i' , $modified  ) ),
-			$authors
+			__( 'Changed by %l %s', 'revisions-digest' ),
+			$authors,
+			sprintf( __( '%s ago' ), human_time_diff( $modified_gmt, time() ) )
 		);
 		printf(
 			'<p>%1$s</p>',
