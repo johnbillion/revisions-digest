@@ -87,13 +87,14 @@ function widget( $no_idea, array $meta_box ) {
 
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
-			__( 'Changed by %l %s', 'revisions-digest' ),
+			__( 'Changed by %l <a href="%s">%s</a>', 'revisions-digest' ),
 			$authors,
+			get_admin_url( null, 'revision.php?revision=' . $change['latest']->ID ),
 			sprintf( __( '%s ago' ), human_time_diff( $modified_gmt, time() ) )
 		);
 		printf(
 			'<p>%1$s</p>',
-			esc_html( $changes_by )
+			wp_kses_post( $changes_by )
 		);
 
 		echo '<table class="diff">';
