@@ -52,6 +52,17 @@ add_action( 'wp_dashboard_setup', function() {
 } );
 
 /**
+ * Load scripts and styles.
+ */
+function do_enqueues() {
+	wp_enqueue_style( 'revisions-digest', plugins_url( 'revisions-digest-styles.css', __FILE__ ), array() );
+	wp_enqueue_script( 'revisions-digest', plugins_url( 'revisions-digest-styles.js', __FILE__ ), array(), true );
+}
+add_action( 'admin_init', __NAMESPACE__ . '\do_enqueues' );
+
+
+
+/**
  * Undocumented function
  *
  * @param mixed $no_idea  @TODO find out what this parameter is.
@@ -64,9 +75,11 @@ function widget( $no_idea, array $meta_box ) {
 		esc_html_e( 'There have been no content changes in the last week', 'revisions-digest' );
 		return;
 	}
+	echo '<div class="revisions-digest-widget">';
 
 	foreach ( $changes as $change ) {
-		echo '<div class="activity-block">';
+		$change_data = get_change_data( $change['rendered'] );
+		echo '<div class="activity-block widgets-holder-wrap  closed">';
 
 		printf(
 			'<h3><a href="%1$s">%2$s</a></h3>',
@@ -83,6 +96,8 @@ function widget( $no_idea, array $meta_box ) {
 			return $user->display_name;
 		}, $change['authors'] ) );
 
+		echo '<span class="toggle-indicator" aria-hidden="true"></span>';
+
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
 			__( 'Changed by %l', 'revisions-digest' ),
@@ -93,12 +108,22 @@ function widget( $no_idea, array $meta_box ) {
 			esc_html( $changes_by )
 		);
 
+		echo '<div class="change-details">';
 		echo '<table class="diff">';
 		echo $change['rendered']; // WPCS: XSS ok.
 		echo '</table>';
-
+		echo '</div>';
 		echo '</div>';
 	}
+	echo '</div>';
+}
+
+function get_change_data( $rendered_diff ) {
+	$diff_data = array(
+		'lines_added'   => substr_count( $rendered_diff, 'diff-addedline'),
+		'lines_removed' => substr_count( $rendered_diff, 'diff-deletedline'),
+	);
+	return$diff_data;
 }
 
 /**

@@ -1,0 +1,7 @@
+.revisions-digest-widget .activity-block .toggle-indicator {
+	float: right;
+}
+
+.revisions-digest-widget .activity-block.closed .diff {
+	display: none;
+}
