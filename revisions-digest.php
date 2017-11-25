@@ -96,7 +96,7 @@ function widget( $no_idea, array $meta_box ) {
 			return $user->display_name;
 		}, $change['authors'] ) );
 
-		echo '<span class="toggle-indicator" aria-hidden="true"></span>';
+		echo '<button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Revision Diff</span><span class="toggle-indicator" aria-hidden="true"></span></button>';
 
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
