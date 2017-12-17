@@ -52,6 +52,17 @@ add_action( 'wp_dashboard_setup', function() {
 } );
 
 /**
+ * Load scripts and styles.
+ */
+function do_enqueues() {
+	wp_enqueue_style( 'revisions-digest', plugins_url( 'revisions-digest-styles.css', __FILE__ ), array() );
+	wp_enqueue_script( 'revisions-digest', plugins_url( 'revisions-digest.js', __FILE__ ), array(), true );
+}
+add_action( 'admin_init', __NAMESPACE__ . '\do_enqueues' );
+
+
+
+/**
  * Undocumented function
  *
  * @param mixed $no_idea  @TODO find out what this parameter is.
@@ -64,9 +75,11 @@ function widget( $no_idea, array $meta_box ) {
 		esc_html_e( 'There have been no content changes in the last week', 'revisions-digest' );
 		return;
 	}
+	echo '<div class="revisions-digest-widget">';
 
 	foreach ( $changes as $change ) {
-		echo '<div class="activity-block">';
+		$change_data = get_change_data( $change['rendered'] );
+		echo '<div class="activity-block widgets-holder-wrap  closed">';
 
 		printf(
 			'<h3><a href="%1$s">%2$s</a></h3>',
@@ -83,6 +96,8 @@ function widget( $no_idea, array $meta_box ) {
 			return $user->display_name;
 		}, $change['authors'] ) );
 
+		echo '<button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Revision Diff</span><span class="toggle-indicator" aria-hidden="true"></span></button>';
+
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
 			__( 'Changed by %l', 'revisions-digest' ),
@@ -93,12 +108,88 @@ function widget( $no_idea, array $meta_box ) {
 			esc_html( $changes_by )
 		);
 
+		$block_count = get_block_count( $change_data );
+?>
+<span class="diffstat tooltipped tooltipped-e">
+	<?php
+	$added = $block_count['added_blocks'];
+	while (  $added-- > 0 ) {
+	?>
+	 <span class="block-diff-added"></span>
+	 <?php
+	}
+
+	$removed = $block_count['removed_blocks'];
+	while (  $removed-- > 0 ) {
+	?>
+	 <span class="block-diff-deleted"></span>
+	<?php
+	}
+	$neutral_blocks = $block_count['neutral_blocks'];
+
+	while ( $neutral_blocks-- > 0 ) {
+	?>
+	 <span class="block-diff-neutral"></span>
+	 <?php
+	 }
+	 ?>
+	</span>
+<?php
+		echo '<span class="revision-changes lines-added">' .
+			esc_html( $change_data['lines_added'] ) . ' ' .
+			 __('additions', 'revisions-digest') .
+		'</span>';
+		echo '<span class="revision-changes lines-removed">' .
+			esc_html( $change_data['lines_removed'] ) . ' ' .
+			__('deletions', 'revisions-digest') .
+		'</span>';
+
+		echo '<div class="change-details">';
 		echo '<table class="diff">';
 		echo $change['rendered']; // WPCS: XSS ok.
 		echo '</table>';
-
+		echo '</div>';
 		echo '</div>';
 	}
+	echo '</div>';
+}
+
+function get_block_count( $diff_data ) {
+	$added   = $diff_data['lines_added'];
+	$removed = $diff_data['lines_removed'];
+
+	// Scale the changes.
+	while ( ( $added + $removed ) > 5 ) {
+		$added   = $added / 2;
+		$removed = $removed / 2;
+	}
+
+	$added   = round( $added );
+	$removed = round( $removed );
+
+	return array(
+		'added_blocks'   => $added,
+		'removed_blocks' => $removed,
+		'neutral_blocks' => 5 - ( $added + $removed ),
+	);
+}
+
+/**
+ * Get the change data for a redered diff.
+ *
+ * @param string $rendered_diff The rendered diff we need to count change data for.
+ *
+ * @return array $diff_data {
+ *     lines_added   The lines added in the diff.
+ *     lines_removed The lines removed in the diff.
+ * }
+ */
+function get_change_data( $rendered_diff ) {
+	$diff_data = array(
+		'lines_added'   => substr_count( $rendered_diff, 'diff-addedline' ),
+		'lines_removed' => substr_count( $rendered_diff, 'diff-deletedline' ),
+	);
+	return $diff_data;
 }
 
 /**
