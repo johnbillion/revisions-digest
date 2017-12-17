@@ -83,14 +83,21 @@ function widget( $no_idea, array $meta_box ) {
 			return $user->display_name;
 		}, $change['authors'] ) );
 
+		$modified_gmt = strtotime( $change['latest']->post_modified_gmt . ' +0000' );
+
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
-			__( 'Changed by %l', 'revisions-digest' ),
-			$authors
+			__( 'Changed by %l <a href="%1$s">%2$s</a>', 'revisions-digest' ),
+			$authors,
+			get_admin_url( null, 'revision.php?revision=' . $change['latest']->ID ),
+			sprintf(
+				__( '%s ago', 'revisions-digest' ),
+				human_time_diff( $modified_gmt, time() )
+			)
 		);
 		printf(
 			'<p>%1$s</p>',
-			esc_html( $changes_by )
+			wp_kses_post( $changes_by )
 		);
 
 		echo '<table class="diff">';
@@ -179,6 +186,8 @@ function get_updated_posts( int $timeframe ) : array {
 			'after'  => $earliest,
 			'column' => 'post_modified',
 		],
+		'order_by' => 'post_modified',
+		'order'    => 'ASC',
 	] );
 
 	// @TODO this might prime the post cache
