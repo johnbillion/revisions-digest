@@ -56,7 +56,7 @@ add_action( 'wp_dashboard_setup', function() {
  */
 function do_enqueues() {
 	wp_enqueue_style( 'revisions-digest', plugins_url( 'revisions-digest-styles.css', __FILE__ ), array() );
-	wp_enqueue_script( 'revisions-digest', plugins_url( 'revisions-digest-styles.js', __FILE__ ), array(), true );
+	wp_enqueue_script( 'revisions-digest', plugins_url( 'revisions-digest.js', __FILE__ ), array(), true );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\do_enqueues' );
 
