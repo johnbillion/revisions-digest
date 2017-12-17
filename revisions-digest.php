@@ -179,6 +179,8 @@ function get_updated_posts( int $timeframe ) : array {
 			'after'  => $earliest,
 			'column' => 'post_modified',
 		],
+		'order_by' => 'post_modified',
+		'order'    => 'ASC',
 	] );
 
 	// @TODO this might prime the post cache
