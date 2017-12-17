@@ -87,7 +87,7 @@ function widget( $no_idea, array $meta_box ) {
 
 		/* translators: %l: comma-separated list of author names */
 		$changes_by = wp_sprintf(
-			__( 'Changed by %l <a href="%s">%s</a>', 'revisions-digest' ),
+			__( 'Changed by %l <a href="%1$s">%2$s</a>', 'revisions-digest' ),
 			$authors,
 			get_admin_url( null, 'revision.php?revision=' . $change['latest']->ID ),
 			sprintf(
@@ -186,6 +186,8 @@ function get_updated_posts( int $timeframe ) : array {
 			'after'  => $earliest,
 			'column' => 'post_modified',
 		],
+		'order_by' => 'post_modified',
+		'order'    => 'ASC',
 	] );
 
 	// @TODO this might prime the post cache
