@@ -18,3 +18,38 @@
 	-o-transition: max-height 0.5s ease-in-out;
 	transition: max-height 0.5s ease-in-out;
  }
+
+ .revision-changes {
+	 padding: 2px;
+	 font-weight: bold;
+ }
+
+  .revision-changes.lines-added {
+	  color: lightgreen;
+  }
+
+   .revision-changes.lines-removed {
+	  color: red;
+  }
+.block-diff-added, .block-diff-neutral {
+background-color: #2cbe4e;
+}
+.block-diff-deleted, .block-diff-added, .block-diff-neutral {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-left: 1px;
+}
+.block-diff-neutral {
+    background-color: #d1d5da;
+}
+.diffstat {
+    font-size: 12px;
+    font-weight: 600;
+    color: #586069;
+    white-space: nowrap;
+    cursor: default;
+}
+.block-diff-deleted, .text-red .block-diff-neutral {
+    background-color: #cb2431;
+}
