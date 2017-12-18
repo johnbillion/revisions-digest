@@ -93,6 +93,12 @@ function widget( $no_idea, array $meta_box ) {
 			esc_html( $changes_by )
 		);
 
+		printf(
+			'<span class="edit-revision-link"><a href="%1$s">%2$s</a></span>',
+			esc_url( get_edit_post_link( $change['latest']->ID ) ),
+			__( 'Edit Revision', 'revisions-digest' )
+		);
+
 		echo '<table class="diff">';
 		echo $change['rendered']; // WPCS: XSS ok.
 		echo '</table>';
