@@ -272,3 +272,23 @@ function render_diff( Text_Diff $text_diff, Text_Diff_Renderer $renderer ) : str
 
 	return $diff;
 }
+
+function register_api_routes()
+{
+
+	// Revisions digest data endpoint.
+	register_rest_route( 'wp/v2', '/revisionsdigest', array(
+		'methods' => 'GET',
+		'callback' => __NAMESPACE__ . '\get_revisions_digest_feed',
+		'permission_callback' => function() { return current_user_can( 'edit_posts' ); }
+	) );
+}
+add_action( 'rest_api_init', __NAMESPACE__ . '\register_api_routes' );
+
+/**
+ * Get the revisions digest feed.
+ */
+function get_revisions_digest_feed() {
+	$changes = get_digest_changes();
+	return $changes;
+}
